@@ -6,9 +6,10 @@ using System.Web;
 
 namespace KBD_PFI.Models
 {
-    public class Comment : Record
+    public class Comment
     {
-        public int Id { get; set; }
+        public int ID { get; set; }
+        public int PhotoId { get; set; }
         public int ParentId { get; set; }
         public string Text { get; set; }
         public DateTime CreationDate { get; set; }
