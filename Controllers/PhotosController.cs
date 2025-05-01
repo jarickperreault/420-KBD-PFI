@@ -1,4 +1,5 @@
 ﻿using KBD_PFI.Models;
+using KBD_PFI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,6 +52,38 @@ namespace KBD_PFI.Controllers
             DB.Photos.Add(photo);
             return RedirectToAction("List");
         }
+
+        public ActionResult Comments(int photoId, int parentId = 0)
+        {
+            List<Comment> comments = DB.Comments.ToList().Where(c => c.PhotoId == photoId && c.ParentId == parentId).ToList();
+            return PartialView("RenderComments", comments);
+        }
+        public ActionResult GetComments(bool forceRefresh = false)
+        {
+            if (Session["currentPhotoId"] != null)
+            {
+                int photoId = (int)Session["currentPhotoId"];
+                if (forceRefresh || true) // always refresh
+                {
+                    List<Comment> comments = DB.Comments.ToList().Where(c => c.PhotoId == photoId && c.ParentId == 0).ToList();
+                    return PartialView("RenderComments", comments);
+                }
+            }
+            return null;
+        }
+        [HttpPost]
+        public ActionResult UpdateComment(int commentId, string commentText)
+        {
+            User connectedUser = ((User)Session["ConnectedUser"]);
+            Comment comment = DB.Comments.Get(commentId);
+            if (comment != null && comment.OwnerId == connectedUser.Id)
+            {
+                comment.Text = commentText;
+                DB.Comments.Update(comment);
+            }
+            return null;
+        }
+
         public ActionResult Edit()
         {
             if (Session["id"] != null && Session["IsOwner"] != null && (bool)Session["IsOwner"])
