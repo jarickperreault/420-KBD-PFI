@@ -28,6 +28,8 @@ namespace KBD_PFI.Models
 
         static public LoginsRepository Logins { get; set; } 
             = new LoginsRepository();
+        static public Repository<Comment> Comments { get; set; }
+            = new Repository<Comment>();
 
         static public Repository<UnverifiedEmail> UnverifiedEmails { get; set; }
             = new Repository<UnverifiedEmail>();

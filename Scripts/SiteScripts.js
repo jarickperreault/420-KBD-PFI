@@ -119,4 +119,32 @@ function ajaxActionCall(actionLink) {
         }
     });
 }
+function commentsSectionAttachEvents() {
+
+    $(".abortEditCommentCmd").off();
+    $(".abortEditCommentCmd").click(function (event) {
+        event.preventDefault();
+        commentsSection.restart();
+        let id = $(this).attr("cmdCommentId");
+        $("#" + id).hide();
+        $("[commentId=" + id + "]").show();
+    })
+    $(".updateCommentCmd").off();
+    $(".updateCommentCmd").click(function (event) {
+        event.preventDefault();
+        let commentId = $(this).attr("cmdCommentId");
+        let commentText = $(this).parent().parent().find("textarea").val();
+        commentsSection.postCommand("/Photos/UpdateComment", { commentId, commentText });
+        commentsSection.restart();
+    })
+    $(".deleteCommentCmd").off()
+    $(".deleteCommentCmd").click(function (event) {
+        event.preventDefault();
+        commentsSection.pause();
+        let commentId = $(this).attr("cmdCommentId");
+        commentsSection.confirmedCommand("Effacer?", `/Photos/DeleteComment?id=${commentId}`);
+        commentsSection.restart();
+    })
+}
+
 
