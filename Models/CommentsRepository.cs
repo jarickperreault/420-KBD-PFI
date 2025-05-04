@@ -12,7 +12,8 @@ namespace PhotosManager.Models
     {
         public void DeleteByPhoto(int photoId)
         {
-            List<Comment> list = ToList().Where(c => c.PhotoId == photoId).ToList();
+            List<Comment> list = ToList().Where(c => c.PhotoId == photoId && c.ParentId == 0).ToList();
+            list.ForEach(l => Delete(l.Id));
         }
     }
 }
