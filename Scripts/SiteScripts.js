@@ -146,5 +146,119 @@ function commentsSectionAttachEvents() {
         commentsSection.restart();
     })
 }
+function detailsPanelAttachEvents() {
+    $("#addRemoveLikeCmd").off();
+    $("#addRemoveLikeCmd").click(function (e) {
+        detailsPanel.command("/Photos/TogglePhotoLike/" + $(this).attr("photoId"));
+        e.preventDefault();
+    });
+}
+function commentsSectionAttachEvents() {
+    $("#commentDetails .fa-thumbs-up").off();
+    $("#commentDetails .fa-thumbs-up").click(function (e) {
+        commentsSection.command("/Photos/ToggleCommentLike/" + $(this).attr("commentId"));
+        e.preventDefault();
+    });
+    $(".editCommentLayout").hide();
+    $(".newCommentLayout").hide();
+    $(".responseLayout").hide();
+
+    $(".newCommentCmd").off();
+    $(".newCommentCmd").click(function () {
+        $("#commentDetails").prop('open', true);
+
+        commentsSection.pause();
+        let parentId = $(this).attr("parentId");
+        $(`[createCommentparentId="${parentId}"]`).show();
+        $(`[createCommentparentId="${parentId}"] > textarea`).val("");
+
+        $('#content').animate({
+            scrollTop: $(`[createCommentparentId="${parentId}"] > textarea`).offset().top
+        }, scrollAnimationSpeed)
+            .promise()
+            .done(() => { $(`[createCommentparentId="${parentId}"] > textarea`).focus(); });
+    })
+    $(".abortCreateCommentCmd").off();
+    $(".abortCreateCommentCmd").click(function (event) {
+        event.preventDefault();
+        commentsSection.restart();
+        let parentId = $(this).attr("parentId");
+        $(`[createCommentparentId="${parentId}"]`).hide();
+    })
+
+    $(".createCommentCmd").off();
+    $(".createCommentCmd").click(function (event) {
+        event.preventDefault();
+        let parentId = $(this).attr("parentId");
+        let commentText = $(this).parent().parent().find("textarea").val();
+        commentsSection.postCommand("/Photos/CreateComment", { parentId, commentText });
+        commentsSection.restart();
+    })
+    $(".CreateResponseCommentCmd").off();
+    $(".CreateResponseCommentCmd").click(function () {
+        commentsSection.pause();
+        let parentId = $(this).attr("parentId");
+        console.log($(`[createResponseparentId="${parentId}"]`)[0])
+        $(`[createResponseparentId="${parentId}"]`).show();
+        $(`[createResponseparentId="${parentId}"] > textarea`).val("");
+        $('#content').animate({
+            scrollTop: $(`[createResponseparentId="${parentId}"] > textarea`).offset().top
+        }, scrollAnimationSpeed)
+            .promise()
+            .done(() => { $(`[createResponseparentId="${parentId}"] > textarea`).focus(); });
+
+    })
+    $(".abortCreateResponseCmd").off();
+    $(".abortCreateResponseCmd").click(function (event) {
+        event.preventDefault();
+        commentsSection.restart();
+        let parentId = $(this).attr("parentId");
+        $(`[createResponseparentId="${parentId}"]`).hide();
+    })
+
+    $(".createResponseCmd").off();
+    $(".createResponseCmd").click(function (event) {
+        event.preventDefault();
+        let parentId = $(this).attr("parentId");
+        let commentText = $(this).parent().parent().find("textarea").val();
+        commentsSection.postCommand("/Photos/CreateComment", { parentId, commentText });
+        commentsSection.restart();
+    })
+    $(".editCommentCmd").off();
+    $(".editCommentCmd").click(function () {
+        commentsSection.pause();
+        let id = $(this).attr("commentId");
+        $("#" + id).show();
+        $("#" + id + "> textarea").focus();
+        $("[commentId=" + id + "]").hide();
+    })
+
+    $(".abortEditCommentCmd").off();
+    $(".abortEditCommentCmd").click(function (event) {
+        event.preventDefault();
+        commentsSection.restart();
+        let id = $(this).attr("cmdCommentId");
+        $("#" + id).hide();
+        $("[commentId=" + id + "]").show();
+    })
+
+    $(".updateCommentCmd").off();
+    $(".updateCommentCmd").click(function (event) {
+        event.preventDefault();
+        let commentId = $(this).attr("cmdCommentId");
+        let commentText = $(this).parent().parent().find("textarea").val();
+        commentsSection.postCommand("/Photos/UpdateComment", { commentId, commentText });
+        commentsSection.restart();
+    })
+
+    $(".deleteCommentCmd").off()
+    $(".deleteCommentCmd").click(function (event) {
+        event.preventDefault();
+        commentsSection.pause();
+        let commentId = $(this).attr("cmdCommentId");
+        commentsSection.confirmedCommand("Effacer?", `/Photos/DeleteComment?id=${commentId}`);
+        commentsSection.restart();
+    })
+}
 
 

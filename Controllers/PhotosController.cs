@@ -1,5 +1,5 @@
 ﻿using KBD_PFI.Models;
-using KBD_PFI.Models;
+using PhotosManager.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +14,8 @@ namespace KBD_PFI.Controllers
     public class PhotosController : Controller
     {
         const string IllegalAccessUrl = "/Accounts/Login?message=Tentative d'accès illégal!&success=false";
+
+        private CommentsRepository commentRepository = new CommentsRepository();
 
         public ActionResult SetPhotoOwnerSearchId(int id)
         {
@@ -57,6 +59,15 @@ namespace KBD_PFI.Controllers
         {
             List<Comment> comments = DB.Comments.ToList().Where(c => c.PhotoId == photoId && c.ParentId == parentId).ToList();
             return PartialView("RenderComments", comments);
+        }
+
+        //Fonctionne pas encore
+        public ActionResult CreateComment(int photoId, string commentText)
+        {
+            Comment comment = new Comment{ PhotoId = photoId, Text = commentText, OwnerId = ((User)Session["ConnectedUser"]).Id, CreationDate = DateTime.Now };
+            DB.Comments.Add(comment);
+            return RedirectToAction("Details/" + photoId);
+            
         }
         public ActionResult GetComments(bool forceRefresh = false)
         {
@@ -124,6 +135,7 @@ namespace KBD_PFI.Controllers
             if (photo != null)
             {
                 Session["id"] = id;
+                Session["currentPhotoId"] = id;
                 User connectedUser = ((User)Session["ConnectedUser"]);
                 Session["IsOwner"] = connectedUser.IsAdmin || photo.OwnerId == connectedUser.Id;    
                 if ((bool)Session["IsOwner"] || photo.Shared)

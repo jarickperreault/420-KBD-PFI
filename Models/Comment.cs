@@ -1,4 +1,5 @@
 ﻿using JSON_DAL;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,11 +21,31 @@ namespace KBD_PFI.Models
             Id = 0;
             CreationDate = DateTime.Now;
         }
+
+        [JsonIgnore]
+        public User Owner => DB.Users.Get(OwnerId);
+
+        [JsonIgnore]
+        public Photo Photo => DB.Photos.Get(PhotoId);
+
+        [JsonIgnore]
+        public Comment Parent => DB.Comments.Get(ParentId);
+
+        [JsonIgnore]
+        public List<Like> Likes => DB.Likes.ToList().Where(l => l.CommentId == Id).ToList();
+
+        [JsonIgnore]
+        public List<Comment> Children => DB.Comments.ToList().Where(c => c.ParentId == Id).ToList();
+
+        [JsonIgnore]
+        public List<User> UsersLikesList => DB.Likes.ToList().Where(l => l.CommentId == Id).Select(l => DB.Users.Get(l.UserId)).ToList(); // l.UserId => UsersLikesList
         
         //public bool IsDeleted { get; set; } = false;
         //public bool IsModified { get; set; } = false;
         //public bool IsEdited { get; set; } = false;
         //public bool IsReported { get; set; } = false;
         //public bool IsHidden { get; set; } = false;
+
+        //La plus part du jsonIgnore n'est pas necessaire, je l'ai laisser pour les tests seulement
     }
 }

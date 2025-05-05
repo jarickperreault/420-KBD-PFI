@@ -12,8 +12,29 @@ namespace PhotosManager.Models
     {
         public void DeleteByPhoto(int photoId)
         {
-            List<Comment> list = ToList().Where(c => c.PhotoId == photoId && c.ParentId == 0).ToList();
-            list.ForEach(l => Delete(l.Id));
+            List<Comment> list = ToList().Where(c => c.PhotoId == photoId).ToList();
+            list.ForEach(c => base.Delete(c.Id));
+        }
+        public override bool Delete(int commentId)
+        {
+            try
+            {
+                Comment commentToDelete = DB.Comments.Get(commentId);
+                if (commentToDelete != null)
+                {
+                    BeginTransaction();
+                    base.Delete(commentId);
+                    EndTransaction();
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Delete Comment failed : Message - {ex.Message}");
+                EndTransaction();
+                return false;
+            }
         }
     }
 }

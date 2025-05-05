@@ -76,7 +76,7 @@
 
 .likesSummary {
     display: grid;
-    grid-template-columns: 60px 30px;
+    grid-template-columns: 88px 30px 30px 30px;
     align-items: center;
     text-align: right;
 }
@@ -85,7 +85,7 @@
     font-size: 1em !important;
     color: dodgerblue;
     display: grid;
-    grid-template-columns: auto 95px;
+    grid-template-columns: auto 180px;
     align-items: center;
 }
 
@@ -93,7 +93,7 @@
     color: dodgerblue;
     margin: 5px;
     display: grid;
-    grid-template-columns: auto 95px;
+    grid-template-columns: auto 180px;
     align-items: center;
 }
 
@@ -128,3 +128,76 @@
         margin-top: 8px;
         width: 100% !important;
     }
+.commentsSection{
+    margin-left: -50px;
+}
+.commentLayout{
+    display: grid;
+    grid-template-columns: 50px auto;
+    align-items: flex-start;
+    margin: 8px;
+}
+.newCommentLayout {
+    display: grid;
+    grid-template-columns: 50px auto;
+    align-items: flex-start;
+    margin: 8px;
+}
+
+.editCommentLayout {
+    display: grid;
+    grid-template-columns: 50px auto;
+    align-items: flex-start;
+    margin: 8px;
+}
+
+divx {
+    border: 1px solid red;
+}
+
+.responseLayout {
+    display: grid;
+    grid-template-columns: 50px auto;
+    align-items: flex-start;
+    margin: 8px;
+    padding-left: 50px;
+}
+
+.commentsLayout {
+    padding-left: 50px;
+}
+
+.commentFooter {
+    font-size: 0.85em;
+    display: grid;
+    grid-template-columns: auto 20px;
+    align-items: center;
+    padding: 3px;
+}
+
+.commentSubFooter {
+    font-size: 1em;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-top: 3px;
+    gap: 15px;
+}
+
+.editCommentFooter {
+    font-size: 1em;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-top: 3px;
+    gap: 15px;
+    padding: 5px;
+}
+
+.textComment {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin: 3px;
+    min-height: 40px;
+    padding: 6px;
+}

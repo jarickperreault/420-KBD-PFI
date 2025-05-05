@@ -1,67 +1,28 @@
-﻿@model IEnumerable<KBD_PFI.Models.Comment>
-@{
-    var user = ((KBD_PFI.Models.User)Session["ConnectedUser"]);
-    int currentPhotoId = (int)Session["currentPhotoId"];
-    int currentCommentId = 0;
+﻿@{
+    ViewBag.Title = "Commentaire";
 }
-<div class="commentsLayout">
-    @if (Model.Count() > 0)
-    {
-        foreach (var comment in Model)
-        {
-            currentCommentId = comment.Id;
-            bool userLike = KBD_PFI.Models.DB.Likes.ToList().Exists(l => (l.CommentId == comment.Id && l.UserId == user.Id));
-            string commentLikedByConnectedUser = userLike ? "fa" : "fa-regular";
-            <!-- Comment rendering -->
-            <div class="commentLayout" commentId="@comment.Id">
-                <div class="UserSmallAvatar" style="background-image:url('@comment.Owner.Avatar')" title="@comment.Owner.Name"></div>
-                <div class="textComment">@Helper.ParseContent(comment.Text)</div>
-                <div></div>
-                <div class="commentFooter">
-                    @Helper.When(comment.CreationDate)
-                    <div class="commentSubFooter">
-                        @comment.Likes.Count()
-                        <i class="cmdIconSmall @commentLikedByConnectedUser fa-thumbs-up" title="@comment.UsersLikesList" commentId="@comment.Id"></i>
-                        @if (comment.Owner.Id == user.Id)
-                        {
-                            <!-- Edit comment command icon -->
-                            <i class="editCommentCmd cmdIconSmall fa fa-edit" commentId="@comment.Id"></i>
-                        }
-                        <!-- Create response command icon -->
-                        <i class="CreateResponseCommentCmd cmdIconSmall fa-regular fa-comment" parentId="@comment.Id" title="Répondre/commenter"></i>
-                    </div>
-                </div>
-            </div>
-            <!-- Hidden programmatically edit comment UI -->
-            <div class="editCommentLayout" id="@comment.Id" userId="@user.Id" ownerId="@comment.Owner.Id">
-                <div class="UserSmallAvatar" style="background-image:url('@comment.Owner.Avatar')" title="@comment.Owner.Name"></div>
-<textarea class="form-control" rows="1" placeholder="répondre">@comment.Text</textarea>
-                <div></div>
-                <div class="editCommentFooter">
-                    <div></div>
-                    <!-- Commit update command icon -->
-                    <span class="updateCommentCmd cmdIconSmall fa fa-check" cmdCommentId="@comment.Id"></span>
-                    <!-- Abort update command icon -->
-                    <span class="abortEditCommentCmd cmdIconSmall fa fa-times" cmdCommentId="@comment.Id"></span>
-                    <!-- Delete command icon -->
-                    <span class="deleteCommentCmd cmdIconSmall fa fa-trash" cmdCommentId="@comment.Id"></span>
-                </div>
-            </div>
-            <!-- Render responses (recurvity) -->
-            Html.RenderAction("Comments", "Photos", new { photoId = comment.PhotoId, parentId = comment.Id });
-            <!-- Hidden programmatically create response comment UI -->
-            <div class="responseLayout" photoId="@currentPhotoId" createResponseparentId="@currentCommentId">
-                <div class="UserSmallAvatar" style="background-image:url('@user.Avatar')" title="@user.Name"></div>
-<textarea class="form-control" rows="1" placeholder="répondre"></textarea>
-                <div></div>
-                <div class="editCommentFooter">
-                    <div></div>
-                    <!-- Commit create command icon -->
-                    <span class="createResponseCmd cmdIconSmall fa fa-check" parentId="@currentCommentId"></span>
-                    <!-- Abort update command icon -->
-                    <span class="abortCreateResponseCmd fa fa-times" parentId="@currentCommentId"></span>
-                </div>
-            </div>
-        }
-    }
-</div>
+
+
+
+<div id="CommentsPanel" class="commentsLayout"> </div>
+
+@section Scripts{
+    <!--Il me reste ça à faire fonctionner pour que le ToggleLike et le ToggleComment fonctionne(ToggleComment n'a pas encore été implémenté')-->
+    @Scripts.Render("~/SiteScripts.js") <!--Pas sur pour ça-->
+    <script>
+
+        $(() => {
+            let CommentsPanel = new AutoRefreshedPanel("CommentsPanel", "/Photos/GetComments", 5);
+        })
+
+        let commentsSection;
+        let scrollAnimationSpeed = 1000;
+        $(() => {
+            detailsPanel = new AutoRefreshedPanel("DetailsPanel", "/Photos/GetDetails", GPRR, detailsPanelAttachEvents);
+            commentsSection = new AutoRefreshedPanel("commentsSection", "/Photos/GetComments", GPRR, commentsSectionAttachEvents);
+        })
+
+
+    </script>
+
+}

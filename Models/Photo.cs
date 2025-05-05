@@ -25,6 +25,14 @@ namespace KBD_PFI.Models
 
         [JsonIgnore]
         public List<Like> Likes => DB.Likes.ToList().Where(l => l.PhotoId == Id).ToList(); 
+
+        [JsonIgnore]
+        public int LikesCount => Likes.Count;
+
+        [JsonIgnore]
+        public List<Comment> Comments => DB.Comments.ToList().Where(c => c.PhotoId == Id).ToList();
+        [JsonIgnore]
+        public int CommentsCount => DB.Comments.ToList().Where(c => c.PhotoId == Id).Count();
         
         [JsonIgnore]
         public string UsersLikesList
@@ -39,6 +47,21 @@ namespace KBD_PFI.Models
                 return UsersLikesList;
             }
         }
+
+        [JsonIgnore] //Fonctionne pas, je ne sais pas pourquoi, mais le code devrait ressembler à ça
+        public string UsersCommentsList
+        {
+            get
+            {
+                string UsersCommentsList = "";
+                foreach (var comment in Comments)
+                {
+                    UsersCommentsList += DB.Users.Get(comment.OwnerId).Name + "\n";
+                }
+                return UsersCommentsList;
+            }
+        }
+
         [ImageAsset(PhotosFolder, DefaultPhoto)]
         public string Image { get; set; }           // Url relatif de l'image
 
