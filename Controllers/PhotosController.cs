@@ -15,8 +15,6 @@ namespace KBD_PFI.Controllers
     {
         const string IllegalAccessUrl = "/Accounts/Login?message=Tentative d'accès illégal!&success=false";
 
-        private CommentsRepository commentRepository = new CommentsRepository();
-
         public ActionResult SetPhotoOwnerSearchId(int id)
         {
             Session["photoOwnerSearchId"] = id;
@@ -67,7 +65,19 @@ namespace KBD_PFI.Controllers
             Comment comment = new Comment{ PhotoId = photoId, Text = commentText, OwnerId = ((User)Session["ConnectedUser"]).Id, CreationDate = DateTime.Now };
             DB.Comments.Add(comment);
             return RedirectToAction("Details/" + photoId);
-            
+        }
+        public ActionResult GetDetails(bool forceRefresh = false)
+        {
+            if (Session["currentPhotoId"] != null)
+            {
+                int photoId = (int)Session["currentPhotoId"];
+                if (forceRefresh || true) // always refresh
+                {
+                    Photo photo = DB.Photos.Get(photoId);
+                    return PartialView("_Details", photo);
+                }
+            }
+            return null;
         }
         public ActionResult GetComments(bool forceRefresh = false)
         {
@@ -170,6 +180,13 @@ namespace KBD_PFI.Controllers
             User connectedUser = (User)Session["ConnectedUser"];
             DB.Likes.ToggleLike(id, connectedUser.Id);
             return RedirectToAction("Details/" + id);
+        }
+
+        public ActionResult ToggleCommentLike(int id)
+        {
+            User connectedUser = (User)Session["ConnectedUser"];
+            DB.Likes.ToggleLike(id, connectedUser.Id);
+            return RedirectToAction("Details/" + Session["currentPhotoId"]);
         }
     }
 }

@@ -246,7 +246,7 @@
     <Content Include="Views\Photos\Details.cshtml" />
     <Content Include="Views\Photos\GetPhotos.cshtml" />
     <Content Include="Views\Photos\RenderComments.cshtml" />
-    <Content Include="Views\Photos\GetComments.cshtml" />
+    <Content Include="Views\Photos\_Details.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
