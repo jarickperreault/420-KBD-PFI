@@ -32,7 +32,7 @@ namespace KBD_PFI.Models
         [JsonIgnore]
         public List<Comment> Comments => DB.Comments.ToList().Where(c => c.PhotoId == Id).ToList();
         [JsonIgnore]
-        public int CommentsCount => DB.Comments.ToList().Where(c => c.PhotoId == Id).Count();
+        public int CommentsCount => DB.Comments.ToList().Where(c => c.PhotoId == Id && c.ParentId == 0).Count();
         
         [JsonIgnore]
         public string UsersLikesList
