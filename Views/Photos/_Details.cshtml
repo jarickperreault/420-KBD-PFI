@@ -1,0 +1,22 @@
+﻿<div class="photoDetails">
+    <div class="photoDetailsOwner">
+        <div class="UserSmallAvatar" style="background-image : url('@Model.Owner.Avatar')" title="@Model.Owner.Name"></div>
+        <span>@Model.Owner.Name</span>
+    </div>
+    <hr />
+    <div class="photoDetailsTitle">@Model.Title</div>
+    <a href="@Model.Image" target="_blank">
+        <img src="@Model.Image" class="photoDetailsLargeImage" />
+    </a>
+    <div class="photoDetailsCreationDate">
+        <!--Le to string doit être changé pour que ça affiche dans un format qui montre le jour ou le truc de "Il y a x heures"-->
+        <span>@Helper.When(Model.CreationDate)</span>
+        <div class="likesSummary">
+            @Model.CommentsCount
+            <i class="cmdIconSmall fa-regular fa-comment" title="@Model.UsersCommentsList"></i>
+            @Model.LikesCount
+            <div style="font-size:1.1em" class="cmdIconSmall fa-regular fa-thumbs-up" id="addRemoveLikeCmd" photoId="@Model.Id" title="@Model.UsersLikesList"></div>
+        </div>
+    </div>
+    <div class="photoDetailsDescription">@Model.Description</div>
+</div>

@@ -113,6 +113,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\PhotosController.cs" />
     <Compile Include="Models\Comment.cs" />
+    <Compile Include="Models\CommentsRepository.cs" />
     <Compile Include="Models\Like.cs" />
     <Compile Include="Models\LikesRepository.cs" />
     <Compile Include="Models\Login.cs" />
@@ -245,6 +246,7 @@
     <Content Include="Views\Photos\Details.cshtml" />
     <Content Include="Views\Photos\GetPhotos.cshtml" />
     <Content Include="Views\Photos\RenderComments.cshtml" />
+    <Content Include="Views\Photos\_Details.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
