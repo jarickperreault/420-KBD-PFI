@@ -17,6 +17,8 @@ namespace KBD_PFI.Models
         public DateTime CreationDate { get; set; }
         public string Text { get; set; }
 
+
+        // Les deux constructeur sont peut être la source de problème, à voir
         public Comment(int photoId, int parentId, string commentText)
         {
             Id = 0;
@@ -25,12 +27,10 @@ namespace KBD_PFI.Models
             Text = commentText;
             CreationDate = DateTime.Now;
         }
-        public Comment(int id, string commentText, int OwnerId)
+        public Comment()
         {
-            Id = id;
-            Text = commentText;
-            this.OwnerId = OwnerId;
-            this.CreationDate = DateTime.Now;
+            Id = 0;
+            CreationDate = DateTime.Now;
         }
 
         [JsonIgnore]
