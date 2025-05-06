@@ -111,8 +111,18 @@
             $(".createCommentCmd").click(function (event) {
                 event.preventDefault();
                 let parentId = $(this).attr("parentId");
-                let commentText = $(this).parent().parent().find("textarea").val();
-                commentsSection.postCommand("/Photos/CreateComment", { parentId, commentText });
+                let container = $(`[createCommentparentId="${parentId}"]`);
+                let photoId = parseInt(container.attr("photoId"));
+                let commentText = container.find("textarea").val();
+                if (commentText.trim() === "") return;
+
+                commentsSection.postCommand("/Photos/CreateComment", {
+                    photoId: photoId,
+                    parentId: parseInt(parentId),
+                    commentText: commentText
+                });
+                container.find("textarea").val("");
+                container.hide();
                 commentsSection.restart();
             })
             $(".CreateResponseCommentCmd").off();
@@ -140,11 +150,24 @@
             $(".createResponseCmd").off();
             $(".createResponseCmd").click(function (event) {
                 event.preventDefault();
+
                 let parentId = $(this).attr("parentId");
-                let commentText = $(this).parent().parent().find("textarea").val();
-                commentsSection.postCommand("/Photos/CreateComment", { parentId, commentText });
+                let container = $(`[createResponseparentId="${parentId}"]`);
+                let photoId = parseInt(container.attr("photoId"));
+                let commentText = container.find("textarea").val();
+
+                if (commentText.trim() === "") return;
+
+                commentsSection.postCommand("/Photos/CreateComment", {
+                    photoId: photoId,
+                    parentId: parseInt(parentId),
+                    commentText: commentText
+                });
+
+                container.find("textarea").val("");
+                container.hide();
                 commentsSection.restart();
-            })
+            });
             $(".editCommentCmd").off();
             $(".editCommentCmd").click(function () {
                 commentsSection.pause();

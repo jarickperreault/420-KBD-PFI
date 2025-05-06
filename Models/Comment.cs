@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace KBD_PFI.Models
 {
@@ -16,10 +17,20 @@ namespace KBD_PFI.Models
         public DateTime CreationDate { get; set; }
         public string Text { get; set; }
 
-        public Comment()
+        public Comment(int photoId, int parentId, string commentText)
         {
             Id = 0;
+            PhotoId = photoId;
+            ParentId = parentId;
+            Text = commentText;
             CreationDate = DateTime.Now;
+        }
+        public Comment(int id, string commentText, int OwnerId)
+        {
+            Id = id;
+            Text = commentText;
+            this.OwnerId = OwnerId;
+            this.CreationDate = DateTime.Now;
         }
 
         [JsonIgnore]

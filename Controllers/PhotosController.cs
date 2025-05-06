@@ -60,9 +60,9 @@ namespace KBD_PFI.Controllers
         }
 
         //Fonctionne pas encore
-        public ActionResult CreateComment(int photoId, string commentText)
+        public ActionResult CreateComment(int photoId, int parentId, string commentText)
         {
-            Comment comment = new Comment{ PhotoId = photoId, Text = commentText, OwnerId = ((User)Session["ConnectedUser"]).Id, CreationDate = DateTime.Now };
+            Comment comment = new Comment(photoId, parentId, commentText);
             DB.Comments.Add(comment);
             return RedirectToAction("Details/" + photoId);
         }
@@ -178,7 +178,12 @@ namespace KBD_PFI.Controllers
         public ActionResult TogglePhotoLike(int id)
         {
             User connectedUser = (User)Session["ConnectedUser"];
-            DB.Likes.ToggleLike(id, connectedUser.Id);
+            if(connectedUser != null)
+            {
+                connectedUser = DB.Users.Get(connectedUser.Id); 
+                DB.Likes.ToggleLike(id, connectedUser.Id);
+            }
+           
             return RedirectToAction("Details/" + id);
         }
 
