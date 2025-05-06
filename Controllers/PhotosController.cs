@@ -52,7 +52,6 @@ namespace KBD_PFI.Controllers
             DB.Photos.Add(photo);
             return RedirectToAction("List");
         }
-
         public ActionResult Comments(int photoId, int parentId = 0)
         {
             List<Comment> comments = DB.Comments.ToList().Where(c => c.PhotoId == photoId && c.ParentId == parentId).ToList();
