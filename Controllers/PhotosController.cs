@@ -104,6 +104,18 @@ namespace KBD_PFI.Controllers
             }
             return null;
         }
+        [HttpPost]
+        public ActionResult DeleteComment(int commentId, string commentText)
+        {
+            User connectedUser = ((User)Session["ConnectedUser"]);
+            Comment comment = DB.Comments.Get(commentId);
+            if (comment != null && comment.OwnerId == connectedUser.Id)
+            {
+                comment.Text = commentText;
+                DB.Comments.Delete(commentId);
+            }
+            return null;
+        }
 
         public ActionResult Edit()
         {
