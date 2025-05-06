@@ -48,7 +48,7 @@ namespace KBD_PFI.Models
             }
         }
 
-        [JsonIgnore] //Fonctionne pas, je ne sais pas pourquoi, mais le code devrait ressembler à ça
+        [JsonIgnore] 
         public string UsersCommentsList
         {
             get

@@ -60,9 +60,9 @@ namespace KBD_PFI.Controllers
         }
 
         //Fonctionne pas encore
-        public ActionResult CreateComment(int photoId, int parentId, string commentText)
+        public ActionResult CreateComment(int photoId,int parentId, string commentText)
         {
-            Comment comment = new Comment(photoId, parentId, commentText);
+            Comment comment = new Comment(photoId, parentId, commentText); //Problème vient peut etre d'ici ou de ce qui est recu en paramètre
             DB.Comments.Add(comment);
             return RedirectToAction("Details/" + photoId);
         }
