@@ -15,7 +15,7 @@
 label,
 input,
 textarea {
-    max-width: 450px;
+    max-width: 850px;
 }
 
 label {
@@ -67,6 +67,7 @@ label {
     cursor: pointer;
     text-decoration: none;
 }
+
 .cmdIconSmall {
     font-size: 1rem;
     -webkit-text-stroke-color: white;
@@ -98,6 +99,11 @@ label {
 .menu-icon-layout {
     display: flex;
     justify-content: flex-end;
+}
+
+.menuIcon {
+    -webkit-text-fill-color: rgb(0, 87, 204);
+    width: 20px;
 }
 
 .unselected {
@@ -343,6 +349,14 @@ fieldset {
     height: 50px;
 }
 
+.eventJournalLayout {
+    display: grid;
+    grid-template-columns: 190px 45px 155px auto;
+    align-items: center;
+    height: 32px;
+}
+
+
 @media screen and (max-width: 750px ) {
     .loginJournalLayout {
         grid-template-columns: 215px 45px 12px 45px 60px 0px;
@@ -357,6 +371,27 @@ fieldset {
     display: flex;
     column-gap: 8px;
     align-items: center;
+}
+
+.UserHeaderAvatar {
+    width: 30px;
+    height: 30px;
+    margin-top: 5px;
+    margin-right: 3px;
+    margin-left: 3px;
+    border-radius: 25px;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}
+
+.UserXSmallAvatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 25px;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
 }
 
 .UserSmallAvatar {
@@ -376,33 +411,9 @@ fieldset {
     background-position: center !important;
     background-repeat: no-repeat !important;
 }
-.commentsLayout {
-    margin: 10px;
-}
 
-.commentLayout {
-    margin: 10px;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-}
 
-.textComment {
-    display: inline-block;
-    vertical-align: middle;
-    max-width: 500px;
-}
-
-.commentFooter, .editCommentFooter {
-    margin-top: 10px;
-}
-
-.commentSubFooter {
-    display: inline-flex;
-    align-items: center;
-}
-
-.responseLayout, .editCommentLayout {
-    margin-top: 10px;
-    margin-left: 20px;
-    display: none;
+.dropdownLayout {
+    display: grid !important;
+    grid-template-columns: 25px auto !important;
 }

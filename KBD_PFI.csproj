@@ -182,7 +182,6 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Logo-Lionel-Groulx.png" />
-    <Content Include="Properties\PublishProfiles\PhotosManager2025 - Web Deploy.pubxml.user" />
     <Content Include="Scripts\bootbox-custom.js" />
     <Content Include="Scripts\bootbox.js" />
     <Content Include="Scripts\bootbox.min.js" />
@@ -194,7 +193,7 @@
     <Content Include="App_Data\UnverifiedEmails.json" />
     <Content Include="App_Data\Users.json" />
     <Content Include="App_Data\Comments.json" />
-    <None Include="Properties\PublishProfiles\PhotosManager2025 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\KBDPFI20250506085953 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\imageControl-2.0.js" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />

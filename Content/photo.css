@@ -5,12 +5,14 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, 360px);
     gap: 10px;
-    padding: 10px;
+    padding: 5px;
+    padding-top: 0px;
 }
 
 .photoLayout {
-    scroll-snap-align: start;
+    /* scroll-snap-align: start; */
     margin: 0px;
+    padding-top: 0px;
 }
 
 .photoImage {
@@ -19,11 +21,16 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    width: 355px;
-    height: 265px;
+    width: 360px;
+    height: 270px;
     border-radius: 9px;
     padding: 5px;
+    border: 1px solid #ccc;
 }
+
+    .photoImage:hover {
+        box-shadow: rgba(0, 0, 0, 0.5) 0px 4px 16px, rgba(0, 0, 0, 0.5) 0px 8px 32px;
+    }
 
 .photoTitleContainer {
     height: 40px;
@@ -118,25 +125,30 @@
     flex-direction: column;
     gap: 8px;
     margin-top: 20px;
-    align-content:center;
+    align-content: center;
 }
 
     .photo-form fieldset {
-        width:100% !important;
+        width: 100% !important;
     }
+
     .photo-form input, textarea {
         margin-top: 8px;
         width: 100% !important;
     }
-.commentsSection{
+
+.commentsSection {
     margin-left: -50px;
 }
-.commentLayout{
+
+.commentLayout {
     display: grid;
     grid-template-columns: 50px auto;
     align-items: flex-start;
     margin: 8px;
 }
+
+
 .newCommentLayout {
     display: grid;
     grid-template-columns: 50px auto;
@@ -200,4 +212,8 @@ divx {
     margin: 3px;
     min-height: 40px;
     padding: 6px;
+}
+
+.contentImage {
+    width: 100%;
 }

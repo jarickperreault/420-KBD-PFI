@@ -1,4 +1,5 @@
 ﻿let EndSessionAction = '/Accounts/Login';
+let GPRR = 5;
 class AutoRefreshedPanel {
     constructor(panelId, contentServiceURL, refreshRate, postRefreshCallback = null) {
         this.contentServiceURL = contentServiceURL;
@@ -9,7 +10,9 @@ class AutoRefreshedPanel {
         this.refresh(true);
         setInterval(() => { this.refresh() }, this.refreshRate);
     }
-    pause() { this.paused = true }
+    pause() {
+        this.paused = true;
+    }
     restart() { this.paused = false }
     replaceContent(htmlContent) {
         if (htmlContent !== "") {
@@ -19,6 +22,7 @@ class AutoRefreshedPanel {
     }
     refresh(forced = false) {
         if (!this.paused) {
+            console.log("Panel Refresh Rate :", this.refreshRate / 1000, " seconds");
             $.ajax({
                 url: this.contentServiceURL + (forced ? (this.contentServiceURL.indexOf("?") > -1 ? "&" : "?") + "forceRefresh=true" : ""),
                 dataType: "html",
@@ -46,6 +50,14 @@ class AutoRefreshedPanel {
                 if (moreCallBack != null)
                     moreCallBack(params);
 
+            },
+            statusCode: {
+                500: function () {
+                    if (EndSessionAction != "")
+                        window.location = EndSessionAction + "?message=Votre session a été fermée!&success=false";
+                    else
+                        alert("Illegal access!");
+                }
             }
         });
     }

@@ -1,8 +1,10 @@
 ﻿using JSON_DAL;
+using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Reflection;
 using System.Web;
@@ -24,16 +26,41 @@ namespace KBD_PFI.Models
         public bool Shared { get; set; }            // Indicateur de partage ("true" ou "false")
 
         [JsonIgnore]
-        public List<Like> Likes => DB.Likes.ToList().Where(l => l.PhotoId == Id).ToList(); 
+        private int _likesCount = -1;
+        [JsonIgnore]
+        private List<Like> _likesList = null;
+        [JsonIgnore]
+        private int _commentsCount = -1;
+        [JsonIgnore]
+        private List<Comment> _commentsList = null;
+        public void ResetCountsCalc()
+        {
+            _likesCount = -1;
+            _likesList = null;
+            _commentsCount = -1;
+            _commentsList = null;
+        }
+        [JsonIgnore]
+        public int LikesCount
+        {
+            get
+            {
+                if (_likesCount == -1)
+                    _likesCount = Likes.Count();
+                return _likesCount;
+            }
+        }
+        [JsonIgnore]
+        public List<Like> Likes
+        {
+            get
+            {
+                if (_likesList == null)
+                    _likesList = DB.Likes.ToList().Where(l => l.PhotoId == Id && l.CommentId == 0).ToList();
+                return _likesList;
+            }
+        }
 
-        [JsonIgnore]
-        public int LikesCount => Likes.Count;
-
-        [JsonIgnore]
-        public List<Comment> Comments => DB.Comments.ToList().Where(c => c.PhotoId == Id).ToList();
-        [JsonIgnore]
-        public int CommentsCount => DB.Comments.ToList().Where(c => c.PhotoId == Id && c.ParentId == 0).Count();
-        
         [JsonIgnore]
         public string UsersLikesList
         {
@@ -47,21 +74,21 @@ namespace KBD_PFI.Models
                 return UsersLikesList;
             }
         }
-
-        [JsonIgnore] 
-        public string UsersCommentsList
+        [JsonIgnore]
+        public string UsersCommentList
         {
             get
             {
-                string UsersCommentsList = "";
-                foreach (var comment in Comments)
+                string UsersCommentList = "";
+                foreach (var comment in Comments.DistinctBy(c=>c.OwnerId))
                 {
-                    UsersCommentsList += DB.Users.Get(comment.OwnerId).Name + "\n";
+                    User owner = comment.Owner;
+                    if (owner != null)
+                        UsersCommentList += owner.Name + "\n";
                 }
-                return UsersCommentsList;
+                return UsersCommentList;
             }
         }
-
         [ImageAsset(PhotosFolder, DefaultPhoto)]
         public string Image { get; set; }           // Url relatif de l'image
 
@@ -74,5 +101,25 @@ namespace KBD_PFI.Models
         }
         [JsonIgnore]
         public User Owner => DB.Users.Get(OwnerId);
+        [JsonIgnore]
+        public int CommentsCount
+        {
+            get
+            {
+                if (_commentsCount == -1)
+                    _commentsCount = Comments.Count();
+                return _commentsCount;
+            }
+        }
+        [JsonIgnore]
+        public List<Comment> Comments
+        {
+            get
+            {
+                if (_commentsList == null)
+                    _commentsList = DB.Comments.ToList().Where(c => c.PhotoId == Id && c.ParentId == 0).ToList();
+                return _commentsList;
+            }
+        }
     }
 }

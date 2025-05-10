@@ -1,7 +1,10 @@
 ﻿using JSON_DAL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace KBD_PFI.Models
 {
@@ -11,21 +14,28 @@ namespace KBD_PFI.Models
         public void ToggleLike(int photoId, int userId)
         {
             Like like = ToList().Where(l => (l.PhotoId == photoId && l.UserId == userId)).FirstOrDefault();
-            Photo photo = DB.Photos.Get(photoId);
+
             if (like != null)
             {
-                BeginTransaction();
-                DB.Photos.Update(photo);
                 Delete(like.Id);
-                EndTransaction();
             }
             else
             {
-                BeginTransaction();
-                DB.Photos.Update(photo);
                 like = new Like { PhotoId = photoId, UserId = userId };
                 Add(like);
-                EndTransaction();
+            }
+        }
+        public void ToggleCommentLike(int commentId, int userId)
+        {
+            Like like = ToList().Where(l => (l.CommentId == commentId && l.UserId == userId)).FirstOrDefault()?.Copy();
+            if (like != null)
+            {
+                Delete(like.Id);
+            }
+            else
+            {
+                like = new Like { CommentId = commentId, UserId = userId };
+                Add(like);
             }
         }
         public void DeleteByPhotoId(int photoId)

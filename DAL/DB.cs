@@ -26,16 +26,18 @@ namespace KBD_PFI.Models
         static public LikesRepository Likes { get; set; }
            = new LikesRepository();
 
-        static public LoginsRepository Logins { get; set; } 
+        static public LoginsRepository Logins { get; set; }
             = new LoginsRepository();
-        static public Repository<Comment> Comments { get; set; }
-            = new Repository<Comment>();
+
+        static public CommentsRepository Comments { get; set; }
+            = new CommentsRepository();
 
         static public Repository<UnverifiedEmail> UnverifiedEmails { get; set; }
             = new Repository<UnverifiedEmail>();
 
         static public Repository<RenewPasswordCommand> RenewPasswordCommands { get; set; }
             = new Repository<RenewPasswordCommand>();
+
         #endregion
     }
 }

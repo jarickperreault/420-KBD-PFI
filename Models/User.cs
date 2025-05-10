@@ -22,8 +22,6 @@ namespace KBD_PFI.Models
             Admin = false;
             Online = false;
             Verified = false;
-            Notify = false;
-
         }
         [JsonIgnore]
         public static string DefaultImage { get { return Avatars_Folder + Default_Avatar; } }
@@ -59,7 +57,6 @@ namespace KBD_PFI.Models
         public bool Admin { get; set; }
         public bool Blocked { get; set; }
         public bool Verified { get; set; }
-        public bool Notify { get; set; }
 
         [ImageAsset(Avatars_Folder, Default_Avatar)]
         public string Avatar { get; set; } = DefaultImage;
@@ -79,10 +76,7 @@ namespace KBD_PFI.Models
 
         public void DeleteLogins()
         {
-            foreach (Login login in Logins)
-            {
-                DB.Logins.Delete(login.Id);
-            }
+            Logins.ForEach(l => DB.Logins.Delete(l.Id));
         }
 
         public void DeletePhotos()

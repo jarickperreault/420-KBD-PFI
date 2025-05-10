@@ -1,11 +1,12 @@
-﻿.login-form {
-    max-width:320px;
-    margin:auto;
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-    text-align:center;
+﻿.event-form {
+    max-width: 320px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
 }
+
 .profil-form {
     max-width: 320px;
     margin: auto;
@@ -15,15 +16,15 @@
     text-align: center;
 }
 
-.login-form input {
-    margin-top:8px;
-    width:100%;
+.event-form input {
+    margin-top: 8px;
+    width: 100%;
 }
 
-    .profil-form input {
-        margin-top: 8px;
-        width: 100%;
-    }
+.profil-form input {
+    margin-top: 8px;
+    width: 100%;
+}
 
 
 fieldset {
@@ -32,6 +33,7 @@ fieldset {
     border-radius: 6px;
     text-align: left;
 }
+
 legend {
     transform: translate(0, -27px);
     font-size: 17px;
@@ -44,9 +46,10 @@ legend {
 }
 
 .passwordLayout {
-    display:grid; 
-    grid-template-columns:auto 0px;
+    display: grid;
+    grid-template-columns: auto 0px;
 }
+
 .passwordShowIcon {
     transform: translate(-35px, 15px);
     cursor: pointer;

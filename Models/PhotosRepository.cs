@@ -13,6 +13,7 @@ namespace KBD_PFI.Models
             List<Photo> list = ToList().Where(p => p.OwnerId == ownerId).ToList();
             list.ForEach(p => {
                 DB.Likes.DeleteByPhotoId(p.Id);
+                DB.Comments.DeleteByPhotoId(p.Id);
                 base.Delete(p.Id);
             });
         }
@@ -25,11 +26,11 @@ namespace KBD_PFI.Models
                 {
                     BeginTransaction();
                     DB.Likes.DeleteByPhotoId(photoId);
+                    DB.Comments.DeleteByPhotoId(photoId);
                     base.Delete(photoId);
                     EndTransaction();
                     return true;
                 }
-
                 return false;
             }
             catch (Exception ex)
@@ -37,6 +38,14 @@ namespace KBD_PFI.Models
                 System.Diagnostics.Debug.WriteLine($"Delete Photo failed : Message - {ex.Message}");
                 EndTransaction();
                 return false;
+            }
+        }
+
+        public void ResetLikesCount()
+        {
+            foreach (Photo photo in ToList())
+            {
+                photo.ResetCountsCalc();
             }
         }
     }
