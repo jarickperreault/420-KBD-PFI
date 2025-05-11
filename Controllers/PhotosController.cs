@@ -29,15 +29,58 @@ namespace PhotosManager.Controllers
             if (forceRefresh || DB.Photos.HasChanged || DB.Likes.HasChanged || DB.Users.HasChanged || DB.Comments.HasChanged)
             {
                 if (DB.Likes.HasChanged || DB.Comments.HasChanged) DB.Photos.ResetLikesCount();
-                return PartialView(DB.Photos.ToList().OrderByDescending(p => p.CreationDate).ToList());
+
+                string sortType = Session["sortType"]?.ToString() ?? "dates"; //C'est le type de tri choisi
+                bool descending = Session["sortDescending"] as bool? ?? true; //ascendant ou descendant
+                string keywords = Session["searchKeywords"]?.ToString()?.ToLower() ?? ""; //mots clé de search
+                int? ownerId = Session["photoOwnerSearchId"] as int?; //permet de donner l'id de l'utilisateur choisi
+
+                User connectedUser = (User)Session["ConnectedUser"];
+
+                IEnumerable<Photo> photos = DB.Photos.ToList();
+
+                if(!string.IsNullOrWhiteSpace(keywords))
+                {
+                    photos = photos.Where(p => p.Title.ToLower().Contains(keywords) || p.Description.ToLower().Contains(keywords));
+                }
+                if(ownerId.HasValue && ownerId.Value != 0)
+                {
+                    photos = photos.Where(p => p.OwnerId == ownerId.Value);
+                }
+
+                switch(sortType)
+                {
+                    case "likes":
+                        photos = descending ? photos.OrderByDescending(p => p.LikesCount) : photos.OrderBy(p => p.LikesCount);
+                        break;
+                    case "comments":
+                        photos = descending ? photos.OrderByDescending(p => p.CommentsCount) : photos.OrderBy(p => p.CommentsCount);
+                        break;
+                    case "dates":
+                    default:
+                        photos = descending ? photos.OrderByDescending(p => p.CreationDate) : photos.OrderBy(p => p.CreationDate);
+                        break;
+                }
+
+                return PartialView("GetPhotos", photos.ToList());
             }
             return null;
         }
-        public ActionResult List()
+        public ActionResult List(string sortType = "dates", bool? descending = null)
         {
             Session["id"] = null;
             Session["IsOwner"] = null;
             DB.Photos.ResetLikesCount();
+
+            if(descending == null) 
+                descending = Session["sortDescending"] as bool? ?? true; 
+
+            Session["sortType"] = sortType;
+            Session["sortDescending"] = descending;
+
+            ViewBag.SortType = sortType; //donne le type de tri choisi
+            ViewBag.SortDescending = descending; //donne si le tri est ascendant ou descendant
+
             return View();
         }
         public ActionResult Create()
@@ -200,6 +243,30 @@ namespace PhotosManager.Controllers
                 DB.Comments.EndTransaction();
             }
             return null;
+        }
+
+        //En gros c'est ce qui fait le sens du tri et fait juste changer la valeur dans la session pour l'autre
+        public JsonResult ToggleSortDirection()
+        {
+            Session["sortDescending"] = !(Session["sortDescending"] as bool? ?? true);
+
+            string sortType = Session["sortType"]?.ToString() ?? "dates"; // Garde le tri actuel
+            bool descending = (bool)Session["sortDescending"]; // Garde le sens actuel
+
+
+            // Retourne les nouvelles valeurs et permet que ça soit pas dans l'url et aussi pas besoin d'un fichier json aussi
+            return Json(new
+            {
+                success = true,
+                descending,
+                sortType
+            }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult ToggleSearch()
+        {
+            bool current = Session["ShowSearch"] as bool? ?? false;
+            Session["ShowSearch"] = !current;
+            return RedirectToAction("List");
         }
     }
 }

@@ -1,12 +1,54 @@
 ﻿
 @{
     ViewBag.Title = "Liste des photos";
+    bool showSearch = Session["ShowSearch"] as bool? ?? false;
 }
+
+@if (showSearch)
+ {
+    <div id="search">
+        <div style="display:grid; grid-template-columns: auto auto; gap: 8px;">
+            <input type="search" placeholder="mot-clés" name="searchToken" id="searchToken" class="form-control" value="@Session["searchKeywords"]" />
+            <select name="SelectedUser" id="SelectedUser" class="form-control">
+                <option value="0" selected>Toutes les photos</option>
+                <option value="-1">Mes photos</option>
+                <optgroup label="Usagers">
+                    @foreach (var user in DB.Users.ToList())
+                     {
+                        <option value="@user.Id">@user.Name</option>
+                     }
+                </optgroup>
+            </select>
+        </div>
+        <div class="menu-icon-layout">
+            <a href="/Photos/ToggleSearch" class="cmdIcon fa fa-times" title="Fermer la barre de recherche"></a>
+        </div>
+    </div>
+ }
 
 <div id="PhotosPanel" class='photosLayout'> <!-- Auto refreshed panel --></div>
 
 @section Scripts {
     <script>
+
+
+        function bindSearchEvents(PhotosPanel) {
+            var timeout = null;
+            $('#searchToken').off().keyup(function () {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    PhotosPanel.command("/Photos/SetSearchKeywords?keywords=" + $(this).val());
+                }, 1000);
+            });
+
+            $('#searchToken').off("search").on("search", function () {
+                PhotosPanel.command("/Photos/SetSearchKeywords?keywords=" + $(this).val());
+            });
+
+            $('#SelectedUser').off().change(function () {
+                PhotosPanel.command("/Photos/SetPhotoOwnerSearchId?id=" + $(this).val());
+            });
+        }
 
         $(() => {
             let PhotosPanel = new AutoRefreshedPanel("PhotosPanel", "/Photos/GetPhotos", GPRR, attachEvent);
@@ -17,8 +59,46 @@
                     PhotosPanel.command("/Photos/TogglePhotoLike/" + $(this).attr("photoId"));
                     e.preventDefault();
                 });
-            }
-        })
 
+                //En gros, il prend chacun des deux balise <a> qui permette le tri ascendant/descendant.
+                //Après ça, il change l'icon du premier(celui dans le header) et change le texte du deuxième(celui dans les trois petits points bleu)
+                //Au final, la page reload parce que juste avec GetPhotos ça fonctionnait pas. 
+                $(".sort-toggle").off().click(function (e) {
+                    e.preventDefault();
+
+                    $.get("/Photos/ToggleSortDirection", function (data) {
+                        if (data.success) {
+                            const headerIcon = $(".cmdIcon.sort-toggle");
+                            if (data.descending) {
+                                headerIcon.removeClass("fa-arrow-circle-down").addClass("fa-arrow-circle-up");
+                                headerIcon.attr("title", "Tri descendant");
+                            } else {
+                                headerIcon.removeClass("fa-arrow-circle-up").addClass("fa-arrow-circle-down");
+                                headerIcon.attr("title", "Tri ascendant");
+                            }
+
+                            $(".dropdown-item.sort-toggle").each(function () {
+                                const textNode = this.childNodes[1]; //ici, texteNode c'est le texte qui a dans la balise <a>
+                                if (textNode) {
+                                    textNode.nodeValue = " Liste des photos [tri " + (data.descending ? "descendant" : "ascendant") + "]";
+                                    //ça change le texte dans la balise sans écraser la balise <i> qui est dedans aussi et c'est pourquoi j'utilise .nodeValue au lieu de .text
+                                }
+                            });
+
+                            if (typeof PhotosPanel !== "undefined") {
+                                location.reload(); //Comme juste avec GetPhotos ça changeait pas la valeur de textNode, j'ai juste forcer un rafraichissement de la page au complet 
+                            } 
+                        }
+                    });
+                });
+
+                if ($('#searchToken').length) {
+                    bindSearchEvents(PhotosPanel);
+                }
+            }
+            if ($('#searchToken').length) {
+                bindSearchEvents(PhotosPanel);
+            }
+        });
     </script>
 }

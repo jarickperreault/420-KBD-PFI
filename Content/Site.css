@@ -417,3 +417,8 @@ fieldset {
     display: grid !important;
     grid-template-columns: 25px auto !important;
 }
+
+.cmdIcon.activeSort{
+    color: #007bff;
+    font-weight: bold;
+}

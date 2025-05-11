@@ -4,21 +4,67 @@
     bool connected = Session["ConnectedUser"] != null;
     var connectedUser = connected ? (PhotosManager.Models.User)Session["ConnectedUser"] : null;
     bool admin = connected ? connectedUser.Admin : false;
+
+    string sortType = ViewBag.SortType as string ?? "dates";
+    bool sortDescending = ViewBag.SortDescending as bool? ?? true;
+
+    string nextSortType = sortType switch
+    {
+        "dates" => "likes",
+        "likes" => "comments",
+        "comments" => "dates",
+        _ => "dates"
+    };
+
+    string sortIcon = sortType switch
+    {
+        "dates" => "fa-calendar",
+        "likes" => "fa-thumbs-up",
+        "comments" => "fa-comment",
+        _ => "fa-calendar"
+    };
+
+    string sortDirectionIcon = sortDescending ? "fa-arrow-circle-up" : "fa-arrow-circle-down";
     
 }
 <div id="header">
-    <img src="/Content/UI-Images/PhotoCloudLogo.png" class="appLogo" alt="" title="Gestionnaire de photos">
+    <a href="/Photos/List">
+        <img src="/Content/UI-Images/PhotoCloudLogo.png" class="appLogo" alt="" title="Gestionnaire de photos">
+    </a>
 
     @switch (action)
     {
         case "list":
             <div class="actionTitle">Photos </div>
             <div class="menu-icon-layout">
+
+                <a href="/Photos/List?sortType=@nextSortType"
+                   class="cmdIcon fa @sortIcon"
+                   title="Tri par @sortType">
+                </a>
+
+                <a id="toggleSort"
+                   href="/Photos/ToggleSortDirection"
+                   class="cmdIcon fa @sortDirectionIcon sort-toggle"
+                   title="Tri @(ViewBag.SortDescending ? "descendant" : "ascendant")">
+                </a>
                 @if (connected)
                 {
                     <a href="/@controller/Create" class="cmdIcon fa fa-plus" title="Ajouter une photo"></a>
                 }
-
+                <a href="/Photos/ToggleSearch" class="cmdIcon fa fa-search" title="Afficher/Masquer la recherche"></a>
+                <div class="dropdown">
+                    <div data-bs-toggle="dropdown" aria-expanded="false">
+                        <i id="notificationsIcon" class="cmdIcon fa fa-regular fa-bell"></i>
+                    </div>
+                    <div id="notificationsPanel" class="dropdown-menu noselect"></div>
+                </div>
+                @if (connected)
+                {
+                    <a href="/Accounts/EditProfil" class="noDecoration">
+                        @Helper.Image(connectedUser.Avatar, "UserHeaderAvatar")
+                    </a>
+                }
                 <div class="dropdown">
                     <div data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="cmdIcon fa fa-ellipsis-vertical"></i>
@@ -49,6 +95,22 @@
                                     <i class="menuIcon fa fa-sign-out"></i> Déconnexion...
                                 </a>
                             </div>
+
+                            <div class="dropdown-divider"></div>
+
+                            <a id="toggleSortDirection" href="/Photos/ToggleSortDirection" class="dropdown-item sort-toggle">
+                                <i class="menuIcon fa fa-image mx-2"></i> Liste des photos [tri @(ViewBag.SortDescending ? "descendant" : "ascendant")]
+                            </a>
+                                <a href="/Photos/List?sortType=dates" class="dropdown-item">
+                                    <i class="menuIcon fa fa-calendar mx-2"></i> par date de création
+                                </a>
+                                <a href="/Photos/List?sortType=likes" class="dropdown-item">
+                                    <i class="menuIcon fa fa-thumbs-up mx-2"></i> par popularité
+                                </a>
+                           
+                                <a href="/Photos/List?sortType=comments" class="dropdown-item">
+                                    <i class="menuIcon fa fa-comment mx-2"></i> par nombre de commentaires
+                                </a>
                         }
                         <div class="dropdown-divider"></div>
 
