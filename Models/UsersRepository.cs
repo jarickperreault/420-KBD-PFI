@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Web;
 
-namespace KBD_PFI.Models
+namespace PhotosManager.Models
 {
     public class UsersRepository : Repository<User>
     {

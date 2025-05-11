@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using System.Net;
 
-namespace KBD_PFI.WebServices
+namespace PhotosManager.WebServices
 {
     public class GeoLocation
     {

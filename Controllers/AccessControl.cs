@@ -1,11 +1,11 @@
-﻿using KBD_PFI.Models;
+﻿using PhotosManager.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace KBD_PFI.Controllers
+namespace PhotosManager.Controllers
 {
     public class AccessControl
     {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security.Policy;
 using System.Web;
 
-namespace KBD_PFI.Models
+namespace PhotosManager.Models
 {
     public class UnverifiedEmail : Record
     {

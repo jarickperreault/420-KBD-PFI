@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 
-namespace KBD_PFI
+namespace PhotosManager
 {
     public class FilterConfig
     {

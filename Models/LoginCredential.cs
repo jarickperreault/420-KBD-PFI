@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace KBD_PFI.Models
+namespace PhotosManager.Models
 {
     public class LoginCredential
     {

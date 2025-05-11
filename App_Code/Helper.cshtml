@@ -141,7 +141,7 @@
 }
 @helper CountryFlag(string countryCode)
 {
-    var country = KBD_PFI.WebServices.Countries.Get(countryCode);
+    var country = PhotosManager.WebServices.Countries.Get(countryCode);
     if (country != null)
     {
         <img src="@country.Flag" title="@country.Name" style="width:40px;" />
@@ -154,7 +154,7 @@
              style="background: url(@avatar)"></div>
     </a>
 }
-@helper AvatarUser(KBD_PFI.Models.User user, string avatarClass = "UserMediumAvatar")
+@helper AvatarUser(PhotosManager.Models.User user, string avatarClass = "UserMediumAvatar")
 {
     var avatarUrl = user.Avatar;
     <div class="userItem">
@@ -162,7 +162,7 @@
         <div class="ellipsis">@user.Name</div>
     </div>
 }
-@helper UsersCheckList(IEnumerable<KBD_PFI.Models.User> users, List<int> selectedUsers, string usersCheckListName = "UsersCheckList")
+@helper UsersCheckList(IEnumerable<PhotosManager.Models.User> users, List<int> selectedUsers, string usersCheckListName = "UsersCheckList")
 {
     var Url = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext);
 

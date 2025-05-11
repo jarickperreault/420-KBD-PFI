@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace KBD_PFI.Models
+namespace PhotosManager.Models
 {
     public class EmailView
     {

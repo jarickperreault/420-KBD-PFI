@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace KBD_PFI.Models
+namespace PhotosManager.Models
 {
     public class CommentsRepository : Repository<Comment>
     {

@@ -1,7 +1,7 @@
 ﻿using JSON_DAL;
 using System;
 
-namespace KBD_PFI.Models
+namespace PhotosManager.Models
 {
     public sealed class DB
     {

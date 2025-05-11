@@ -6,7 +6,7 @@ using System.Linq;
 using System.Web;
 using JSON_DAL;
 
-namespace KBD_PFI.Models
+namespace PhotosManager.Models
 {
     public class Like : Record
     {

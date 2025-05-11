@@ -9,7 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 
-namespace KBD_PFI.Models
+namespace PhotosManager.Models
 {
     public class Photo
     {

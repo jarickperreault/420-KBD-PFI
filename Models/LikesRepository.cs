@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace KBD_PFI.Models
+namespace PhotosManager.Models
 {
     public class LikesRepository : Repository<Like>
     {

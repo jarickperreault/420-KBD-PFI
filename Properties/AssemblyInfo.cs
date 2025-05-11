@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Les informations générales sur un assembly sont contrôlées via ce
 // l'ensemble d'attributs suivant. Changez les valeurs de ces attributs pour modifier les informations
 // associées à un assembly.
-[assembly: AssemblyTitle("KBD-PFI")]
+[assembly: AssemblyTitle("PhotosManager")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("CLG")]
-[assembly: AssemblyProduct("KBD-PFI")]
+[assembly: AssemblyProduct("PhotosManager")]
 [assembly: AssemblyCopyright("Copyright © CLG 2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

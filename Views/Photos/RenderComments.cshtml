@@ -1,7 +1,7 @@
 ﻿
-@model IEnumerable<KBD_PFI.Models.Comment>
+@model IEnumerable<PhotosManager.Models.Comment>
 @{
-    var user = ((KBD_PFI.Models.User)Session["ConnectedUser"]);
+    var user = ((PhotosManager.Models.User)Session["ConnectedUser"]);
     int currentPhotoId = (int)Session["currentPhotoId"];
     int currentCommentId = 0;
 }
@@ -11,7 +11,7 @@
         foreach (var comment in Model)
         {
             currentCommentId = comment.Id;
-            bool userLike = KBD_PFI.Models.DB.Likes.ToList().Exists(l => (l.CommentId == comment.Id && l.UserId == user.Id));
+            bool userLike = PhotosManager.Models.DB.Likes.ToList().Exists(l => (l.CommentId == comment.Id && l.UserId == user.Id));
             string commentLikedByConnectedUser = userLike ? "fa" : "fa-regular";
 
             <!-- Comment rendering -->

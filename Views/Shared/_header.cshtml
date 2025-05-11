@@ -2,7 +2,7 @@
     string controller = HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString().ToLower();
     string action = HttpContext.Current.Request.RequestContext.RouteData.Values["action"].ToString().ToLower();
     bool connected = Session["ConnectedUser"] != null;
-    var connectedUser = connected ? (KBD_PFI.Models.User)Session["ConnectedUser"] : null;
+    var connectedUser = connected ? (PhotosManager.Models.User)Session["ConnectedUser"] : null;
     bool admin = connected ? connectedUser.Admin : false;
     
 }

@@ -8,7 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using CompareAttribute = System.ComponentModel.DataAnnotations.CompareAttribute;
 
-namespace KBD_PFI.Models
+namespace PhotosManager.Models
 {
     public class User : Record
     {

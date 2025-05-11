@@ -3,7 +3,7 @@ using System.Net.Mail;
 using System.Net;
 using System.Web.Configuration;
 
-namespace KBD_PFI.Models
+namespace PhotosManager.Models
 {
     public static class SMTP
     {

@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "Détails de photo";
     int currentPhotoId = (int)Session["currentPhotoId"];
-    var user = ((KBD_PFI.Models.User)Session["ConnectedUser"]);
+    var user = ((PhotosManager.Models.User)Session["ConnectedUser"]);
 }
 <div id="DetailsPanel"> <!-- Auto refreshed --></div>
 <hr />
