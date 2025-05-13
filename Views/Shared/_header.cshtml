@@ -21,9 +21,17 @@
         "dates" => "fa-calendar",
         "likes" => "fa-thumbs-up",
         "comments" => "fa-comment",
+        "ownerDontLike" => "fa-fw",
+        "ownerLikes" => "fa-fw",
+        "ownerComments" => "fa-fw",
+        "ownerNoComment" => "fa-fw",
         _ => "fa-calendar"
     };
 
+    string GetSortCheckIcon(string current)
+    {
+        return sortType == current ? "fa-check" : "fa-fw";
+    }
     string sortDirectionIcon = sortDescending ? "fa-arrow-circle-up" : "fa-arrow-circle-down";
     
 }
@@ -101,16 +109,29 @@
                             <a id="toggleSortDirection" href="/Photos/ToggleSortDirection" class="dropdown-item sort-toggle">
                                 <i class="menuIcon fa fa-image mx-2"></i> Liste des photos [tri @(ViewBag.SortDescending ? "descendant" : "ascendant")]
                             </a>
-                                <a href="/Photos/List?sortType=dates" class="dropdown-item">
-                                    <i class="menuIcon fa fa-calendar mx-2"></i> par date de création
-                                </a>
-                                <a href="/Photos/List?sortType=likes" class="dropdown-item">
-                                    <i class="menuIcon fa fa-thumbs-up mx-2"></i> par popularité
-                                </a>
-                           
-                                <a href="/Photos/List?sortType=comments" class="dropdown-item">
-                                    <i class="menuIcon fa fa-comment mx-2"></i> par nombre de commentaires
-                                </a>
+                            <a href="/Photos/List?sortType=dates" class="dropdown-item">
+                                <i class="menuIcon fa @GetSortCheckIcon("dates") mx-2"></i> <i class="menuIcon fa fa-calendar mx-2"></i>  par date de création
+                            </a>
+                            <a href="/Photos/List?sortType=likes" class="dropdown-item">
+                                <i class="menuIcon fa @GetSortCheckIcon("likes") mx-2"></i><i class="menuIcon fa fa-thumbs-up mx-2"></i> par popularité
+                            </a>
+
+                            <a href="/Photos/List?sortType=comments" class="dropdown-item">
+                                <i class="menuIcon fa @GetSortCheckIcon("comments") mx-2"></i><i class="menuIcon fa fa-comment mx-2"></i> par nombre de commentaires
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="/Photos/List?sortType=ownerDontLike" class="dropdown-item">
+                                <i class='menuIcon fa @GetSortCheckIcon("ownerDontLike") mx-2'></i> <i class="menuIcon fa-regular fa-thumbs-up mx-2"></i> que je n'aime pas
+                            </a>
+                            <a href="/Photos/List?sortType=ownerLikes" class="dropdown-item">
+                                <i class='menuIcon fa @GetSortCheckIcon("ownerLikes") mx-2'></i> <i class="menuIcon fa fa-thumbs-up mx-2"></i> que j'aime
+                            </a>
+                            <a href="/Photos/List?sortType=ownerNoComment" class="dropdown-item">
+                                <i class='menuIcon fa @GetSortCheckIcon("ownerNoComment") mx-2'></i> <i class="menuIcon fa-regular fa-comment mx-2"></i> que je n'ai pas commenté
+                            </a>
+                            <a href="/Photos/List?sortType=ownerComments" class="dropdown-item">
+                                <i class='menuIcon fa @GetSortCheckIcon("ownerComments") mx-2'></i> <i class="menuIcon fa fa-comment mx-2"></i> que j'ai commenté
+                            </a>
                         }
                         <div class="dropdown-divider"></div>
 
