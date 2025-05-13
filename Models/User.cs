@@ -58,6 +58,8 @@ namespace PhotosManager.Models
         public bool Blocked { get; set; }
         public bool Verified { get; set; }
 
+        public bool Notify { get; set; }
+
         [ImageAsset(Avatars_Folder, Default_Avatar)]
         public string Avatar { get; set; } = DefaultImage;
         #endregion

@@ -181,6 +181,16 @@ namespace PhotosManager.Controllers
         {
             User connectedUser = (User)Session["ConnectedUser"];
             DB.Likes.ToggleLike(id, connectedUser.Id);
+
+            var photo = DB.Photos.Get(id);
+            if (photo != null && photo.OwnerId != connectedUser.Id)
+            {
+                NotificationsController.AddNotification(photo.OwnerId, $"{connectedUser.Name} a aimé votre photo!");
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("[PhotosController] Notification not triggered: photo null or same owner");
+            }
             return null;
         }
         public ActionResult Comments(int photoId, int parentId = 0)
@@ -212,6 +222,17 @@ namespace PhotosManager.Controllers
             comment.Text = commentText;
             comment.CreationDate = DateTime.Now;
             DB.Comments.Add(comment);
+
+            var photo = DB.Photos.Get(comment.PhotoId);
+            if (photo != null && photo.OwnerId != connectedUser.Id)
+            {
+                NotificationsController.AddNotification(photo.OwnerId, $"{connectedUser.Name} a commenté votre photo!");
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("[PhotosController] Notification not triggered: photo null or same owner");
+            }
+
             return null;
         }
         [HttpPost]
@@ -230,6 +251,25 @@ namespace PhotosManager.Controllers
         {
             User connectedUser = (User)Session["ConnectedUser"];
             DB.Likes.ToggleCommentLike(id, connectedUser.Id);
+
+            var comment = DB.Comments.Get(id); // Fetch the comment
+            if (comment != null)
+            {
+                var photo = DB.Photos.Get(comment.PhotoId); // Fetch the photo via comment's PhotoId
+                if (photo != null && photo.OwnerId != connectedUser.Id)
+                {
+                    NotificationsController.AddNotification(photo.OwnerId, $"{connectedUser.Name} a aimé votre commentaire!");
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("ToggleCommentLike: No notification added - photo null or same owner");
+                }
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("ToggleCommentLike: No notification added - comment not found");
+            }
+
             return null;
         }
         public ActionResult DeleteComment(int id)
