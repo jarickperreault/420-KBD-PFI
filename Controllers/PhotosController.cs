@@ -1,6 +1,7 @@
 ﻿using PhotosManager.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -39,13 +40,38 @@ namespace PhotosManager.Controllers
 
                 IEnumerable<Photo> photos = DB.Photos.ToList();
 
-                if(!string.IsNullOrWhiteSpace(keywords))
+                if (!string.IsNullOrWhiteSpace(keywords))
                 {
-                    photos = photos.Where(p => p.Title.ToLower().Contains(keywords) || p.Description.ToLower().Contains(keywords));
+                    var keywordsList = keywords.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(k => k.ToLower()).ToList();
+                    photos = photos.Where(p =>
+                    {
+                        string searchableText = $"{p.Title} {p.Description} {p.Owner?.Name}".ToLower();
+                        var searchableWords = searchableText
+                            .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                        return keywordsList.All(kw => searchableWords.Any(word => word.StartsWith(kw)));
+                    });
                 }
-                if(ownerId.HasValue && ownerId.Value != 0)
+
+                if (ownerId.HasValue && ownerId.Value != 0)
                 {
                     photos = photos.Where(p => p.OwnerId == ownerId.Value);
+                }
+                switch (sortType)
+                {
+                    case "ownerLikes":
+                        photos = photos.Where(p => DB.Likes.ToList().Any(l => l.PhotoId == p.Id && l.UserId == connectedUser.Id));
+                        break;
+                    case "ownerDontLike":
+                        photos = photos.Where(p => !DB.Likes.ToList().Any(l => l.PhotoId == p.Id && l.UserId == connectedUser.Id));
+                        break;
+                    case "ownerComments":
+                        photos = photos.Where(p => DB.Comments.ToList().Any(c => c.PhotoId == p.Id && c.OwnerId == connectedUser.Id && c.ParentId == 0));
+                        break;
+                    case "ownerNoComment":
+                        photos = photos.Where(p => !DB.Comments.ToList().Any(c => c.PhotoId == p.Id && c.OwnerId == connectedUser.Id && c.ParentId == 0));
+                        break;
                 }
 
                 switch(sortType)
@@ -57,6 +83,10 @@ namespace PhotosManager.Controllers
                         photos = descending ? photos.OrderByDescending(p => p.CommentsCount) : photos.OrderBy(p => p.CommentsCount);
                         break;
                     case "dates":
+                    case "ownerLikes":
+                    case "ownerDontLike":
+                    case "ownerComments":
+                    case "ownerNoComment":
                     default:
                         photos = descending ? photos.OrderByDescending(p => p.CreationDate) : photos.OrderBy(p => p.CreationDate);
                         break;
